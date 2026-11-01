@@ -1,5 +1,5 @@
 [project]
 dependencies = [
     "platformdirs",
-    "python-gnupg"
+    "pygpgme"
 ]
