@@ -23,15 +23,28 @@ paths.config = platformdirs.user_config_path(
 
 
 # High level file operations
-## Read
-def loadJson(fp: os.PathLike[str]) -> Any:
+## Ensure Exists
+def ensureExists(fp: os.PathLike[str]|pathlib.Path, type: str) -> None:
     fp = pathlib.Path(fp)
+
+    if type == "file":
+        fp.touch(exist_ok=True)
+    elif type == "dir":
+        fp.mkdir(exist_ok=True)
+
+## Read
+def loadJson(fp: os.PathLike[str], fallback=None) -> Any:
+    fp = pathlib.Path(fp)
+
+    if not fp.exists():
+        writeJson(fp, fallback)
+
     with fp.open("rt", encoding="utf8") as fd:
-        json.load(fd)
+        return json.load(fd)
 
 
 ## Write (Atomic)
-def write(fp: os.PathLike[str], content: Any) -> None:
+def writeJson(fp: os.PathLike[str], content: Any) -> None:
     fp = pathlib.Path(fp)
     tempFp = fp.with_suffix(fp.suffix + "swp")
 
@@ -51,7 +64,3 @@ def write(fp: os.PathLike[str], content: Any) -> None:
         os.fsync(parentFd)
     finally:
         os.close(parentFd)
-
-## Exists?
-def exists(fp: os.PathLike[str]) -> bool:
-    return pathlib.Path(fp).exists()

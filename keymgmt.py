@@ -1,8 +1,11 @@
 import sys
+from pathlib import Path
 
 import gnupg
 
 import fs
+
+fs.loadJson(Path(fs.paths.config / "keyMgmt.json"), fallback={})
 
 try:
     gpg = gnupg.GPG()
@@ -24,6 +27,8 @@ GNUPG is not installed!
         sudo pkgin install gnupg # FreeBSD
             *pkgin on FreeBSD is not always installed, mostly a convience
             package manager
+In very rare cases, you might not have a home directory! If you managed to not
+have one, it is expected you know how to... create it back (╥﹏╥)
 """)
     sys.exit(1)
 
