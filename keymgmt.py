@@ -16,5 +16,14 @@ def listKeys(ctx: gpgme.Context, search: str|None=None) -> list[gpgme.Key]:
     else:
         return list(ctx.keylist(search))
 
-search = input("Select your key. Search with Name, Email, or Comment: ")
-print(listKeys(ctx=context, search=search))
+def getFingerprint(key: gpgme.Key):
+    fingerprints = []
+
+    for i in range(len(key.subkeys)):
+        fingerprints.append(key.subkeys[i].fpr)
+
+    return fingerprints
+
+if not config.get("gpg.selectedKey", ""):
+    searchQuery = input("Search keys | ")
+    searchResult = listKeys(context, searchQuery)
