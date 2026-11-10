@@ -1,5 +1,6 @@
 [project]
 dependencies = [
     "platformdirs",
-    "pygpgme"
+    "pygpgme",
+    "questionary"
 ]

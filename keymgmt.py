@@ -16,14 +16,14 @@ def listKeys(ctx: gpgme.Context, search: str|None=None) -> list[gpgme.Key]:
     else:
         return list(ctx.keylist(search))
 
-def getFingerprint(key: gpgme.Key):
-    fingerprints = []
+def getFingerprint(key: gpgme.Key, number: int):
+    return key.subkeys[number].fpr
 
-    for i in range(len(key.subkeys)):
-        fingerprints.append(key.subkeys[i].fpr)
+def getName(key: gpgme.Key, number: int):
+    return key.uids[number].name
 
-    return fingerprints
+def getEmail(key: gpgme.Key, number: int):
+    return key.uids[number].email
 
-if not config.get("gpg.selectedKey", ""):
-    searchQuery = input("Search keys | ")
-    searchResult = listKeys(context, searchQuery)
+def displayKey(key: gpgme.Key): # DEFAULTS TO PRIMARY
+    return f"{getFingerprint(key, 0)} | {getName(key, 0)} | {getEmail(key, 0)}"
