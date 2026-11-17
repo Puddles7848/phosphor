@@ -1,9 +1,12 @@
-import cmd
 import shlex
 
+import cmd2
 
-class InteractiveShell(cmd.Cmd):
-    prompt = "contacts % "
+
+class InteractiveShell(cmd2.Cmd):
+    def __init__(self):
+        super().__init__()
+        self.prompt = "contacts % "
 
     # Exiting
     def do_exit(self, arg: str):
