@@ -54,3 +54,9 @@ def parse_key_subkeys(key: gpgme.Key) -> dict[str,str]:
         }
 
     return subkeys_dict
+
+print(
+    parse_key_usability(key),
+    parse_key_abilities(key),
+    parse_key_indentities(key)
+)
