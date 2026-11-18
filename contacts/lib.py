@@ -65,6 +65,7 @@ def parse_key_full(key: gpgme.Key):
         "abilities": parse_key_abilities(key),
         "uids": parse_key_indentities(key),
         "subkeys": parse_key_subkeys(key),
+        "trust": parse_key_trust(key),
         "validity": parse_key_validity(key),
     }
 
