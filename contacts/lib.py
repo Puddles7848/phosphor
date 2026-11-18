@@ -20,7 +20,7 @@ def parse_key_abilities(key: gpgme.Key|gpgme.Subkey) -> dict[str,bool]:
     }
 
 # Can this key/subkey be used?
-def parse_key_usability(key: gpgme.Key|gpgme.Subkey) -> bool:
+def parse_key_validity(key: gpgme.Key|gpgme.Subkey) -> bool:
     return not key.disabled and not key.expired and not key.revoked
 
 
@@ -50,13 +50,23 @@ def parse_key_subkeys(key: gpgme.Key) -> dict[str,str]:
         subkeys_dict[i] = {
             "fingerprint": csubkey.fpr,
             "abilities": parse_key_abilities(csubkey),
-            "usable": parse_key_usability(csubkey)
+            "usable": parse_key_validity(csubkey)
         }
 
     return subkeys_dict
 
-print(
-    parse_key_usability(key),
-    parse_key_abilities(key),
-    parse_key_indentities(key)
-)
+# What's the key's trust?
+def parse_key_trust(key: gpgme.Key) -> int:
+    return key.owner_trust
+
+# Do it
+def parse_key_full(key: gpgme.Key):
+    return {
+        "abilities": parse_key_abilities(key),
+        "uids": parse_key_indentities(key),
+        "subkeys": parse_key_subkeys(key),
+        "validity": parse_key_validity(key),
+    }
+
+# TEST
+print(parse_key_full(key))
